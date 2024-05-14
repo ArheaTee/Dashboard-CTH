@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request
 import json
 from flask_pymongo import PyMongo
 from pymongo import MongoClient 
+import datetime
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
@@ -22,6 +23,9 @@ for key, url in urls_data.items():
     response = requests.get(url)
     data_dic[key] = response.json()
 
+def get_timestamp():
+  return datetime.datetime.now()
+
 @app.route('/')
 def home():
     if response.status_code == 200:
@@ -30,8 +34,9 @@ def home():
         
         # Create a list of documents
         documents = []
-        for station_id in data1[:11]:  # Assuming first 10 elements are IDs
-            documents.append({"id": station_id})
+        for station_id in data1[:11]:
+            # เพิ่ม timestamp ให้กับเอกสารแต่ละรายการ
+            documents.append({"id": station_id, "timestamp": get_timestamp()})
 
         # Insert multiple documents
         mongo.db.invention.insert_many(documents)
