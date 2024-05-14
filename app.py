@@ -1,10 +1,15 @@
 import requests
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request 
+import json
+from flask_pymongo import PyMongo
+from pymongo import MongoClient 
 
 app = Flask(__name__)
+app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
+mongo = PyMongo(app)
 
 urls_data = {
-    "url1" : "https://api.bitkub.com/api/market/ticker",
+    # "url1" : "https://api.bitkub.com/api/market/ticker",
     "url2" : "http://172.31.6.60:8090/get_all_process_stations_ui/",
     # "url3" :"http://172.31.6.62:8090/get_all_process_stations_ui/",
     # "url4" :"http://172.31.6.59:8090/get_all_process_stations_ui/",
@@ -19,22 +24,18 @@ for key, url in urls_data.items():
 
 @app.route('/')
 def home():
-    thb_eth_data = data_dic.get('THB_ETH', {'id': None, 'last': None})
-    thb_btc_data = data_dic.get('url1', {}).get('THB_BTC', {'id': None, 'last': None})
-    #station_id = data_dic.get[0]["station_id"]
-    station_id = data_dic.get('url2', []).get(' ', {'station_id': None, 'last': None})
-    return jsonify({
-        'id ETH': thb_eth_data.get('id'),
-        'last ETH': thb_eth_data.get('last')},
-        {
-        'id thb_btc' : thb_btc_data.get('id'),
-        'last thb_btc' : thb_btc_data.get('last'),
-        },
-        {
-            "station_id":station_id.get('station_id')
-        }
-        )
+    if response.status_code == 200:
+        # Parse the JSON response
+        data1 = json.loads(response.text)
+        
+        # Create a list of documents
+        documents = []
+        for station_id in data1[:11]:  # Assuming first 10 elements are IDs
+            documents.append({"id": station_id})
 
+        # Insert multiple documents
+        mongo.db.invention.insert_many(documents)
+        return f"Successfully inserted {len(documents)} documents!"
 
 if __name__ == "__main__":
     app.run(debug=True)
