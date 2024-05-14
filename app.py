@@ -36,7 +36,9 @@ def home():
         documents = []
         for station_id in data1[:11]:
             # เพิ่ม timestamp ให้กับเอกสารแต่ละรายการ
-            documents.append({"id": station_id["station_id"], "timestamp": get_timestamp()})
+            documents.append(
+                {"id": station_id["station_id"], 
+                 "timestamp": get_timestamp()})
 
         # Insert multiple documents
         mongo.db.invention.insert_many(documents)
