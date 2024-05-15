@@ -13,8 +13,9 @@ if response.status_code == 200:
     # Parse the JSON response
     data = json.loads(response.text)
 
-    station_id = data[1]
-
-    print(f"First station ID: {station_id}")
+    station_id = data[1]["previous_process_plan_result"]
+if station_id == 'PASSED':
+    print("EiEi")
+    #print(f"First station ID: {station_id}")
 else:
     print(f"Error: API request failed with status code {response.status_code}")

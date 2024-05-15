@@ -1,6 +1,5 @@
 import requests
 from flask import Flask, jsonify, request ,render_template
-import json
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 import datetime
@@ -23,6 +22,7 @@ def get_timestamp():
 @app.route('/')
 def home():
     successful_urls = []
+    results = []
     for key, url in urls_data.items():
         try:
             response = requests.get(url, timeout=5)  # Set a timeout (e.g., 5 seconds)
@@ -38,14 +38,15 @@ def home():
                 }
                 for station in data
             ]
+
             # Insert documents into a collection named after the URL key
             mongo.db[key].insert_many(documents)
             successful_urls.append(key)
 
         except requests.exceptions.RequestException as e:
-            print(f"Error fetching data from {url}: {e}")
+            results.append((key, f"Error: {e}", 0))
 
-    return "Hello world"
+    return render_template('index.html', data=results)
 
 if __name__ == "__main__":
     app.run(debug=True)
