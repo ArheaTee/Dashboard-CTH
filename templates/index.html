@@ -1,11 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>หน้าแสดงผลข้อมูล</title>
-    <link rel="stylesheet" href="style.css"> <!-- เชื่อมไฟล์ CSS (ถ้ามี) -->
+    <title>Data Display</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>ข้อมูลจากฐานข้อมูล</h1>
-    <div id="data-container"></div> <!-- ตำแหน่งสำหรับแสดงผลข้อมูล -->
+    <h1>Fetched Data</h1>
+    <div class="container">
+        {% for source, stations in data.items() %}
+            <div class="card">
+                <h2>{{ source }}</h2>
+                {% for station in stations %}
+                    <div class="item">
+                        <div class="id">{{ station.id }}</div>
+                        <div class="content">
+                            <p>Station Name: {{ station.station_name }}</p>
+                            <p>Result: {{ station.result }}</p>
+                            <p>Timestamp: {{ station.timestamp }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
 </body>
 </html>

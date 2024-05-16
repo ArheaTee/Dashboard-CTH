@@ -3,8 +3,9 @@ from flask import Flask, jsonify, request ,render_template
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 import datetime
+from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/templates', static_folder='templates')
 app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
 mongo = PyMongo(app)
 
@@ -46,7 +47,11 @@ def home():
         except requests.exceptions.RequestException as e:
             results.append((key, f"Error: {e}", 0))
 
-    return render_template('index.html', data=results)
+    all_data = {}
+    for collection_name in successful_urls:
+        all_data[collection_name] = list(mongo.db[collection_name].find({}, {'_id': 0}))  # Exclude _id field
+
+    return render_template('index.html', data=all_data)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

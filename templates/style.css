@@ -1,9 +1,53 @@
-/* ในไฟล์ style.css */
 body {
-    font-family: sans-serif;
+    font-family: 'Roboto', sans-serif; /* ใช้ฟอนต์ Roboto */
+    background-color: #f4f4f4; /* เพิ่มสีพื้นหลัง body */
+    margin: 0;
+    padding: 20px;
 }
 
-/* #data-container { */
-    
-    /* เพิ่มลักษณะการจัดวางและตกแต่งตามต้องการ */
-/* } */
+h1 {
+    text-align: center; /* จัดหัวเรื่องให้อยู่ตรงกลาง */
+    margin-bottom: 30px;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* จัดให้ card อยู่ตรงกลาง */
+}
+
+.card {
+    background-color: white; /* เปลี่ยนพื้นหลัง card เป็นสีขาว */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* เพิ่มความเข้มของเงา */
+    padding: 20px;
+    width: 300px; /* ปรับความกว้างของ card */
+    overflow: hidden; /* ซ่อนส่วนที่เกินขอบ card */
+}
+
+.card h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.card .item {
+    border-bottom: 1px solid #eee; /* เพิ่มเส้นแบ่งระหว่าง item */
+    padding: 10px 0; /* ปรับ padding ให้ห่างจากขอบบนล่าง */
+}
+
+.card .item:last-child {
+    border-bottom: none; /* ไม่ต้องมีเส้นแบ่งสำหรับ item สุดท้าย */
+}
+
+.card .item .id {
+    font-weight: bold; /* ตัวหนาสำหรับ ID */
+    margin-bottom: 5px;
+}
+
+.card .item .content p {
+    margin: 5px 0; /* ปรับระยะห่างระหว่างบรรทัดใน content */
+    font-size: 14px;
+    color: #555;
+}
