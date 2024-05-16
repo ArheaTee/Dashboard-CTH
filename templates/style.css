@@ -42,12 +42,20 @@ h1 {
 }
 
 .card .item .id {
-    font-weight: bold; /* ตัวหนาสำหรับ ID */
+    font-weight: bold;
     margin-bottom: 5px;
+    display: inline-block; /* ให้ id อยู่ในบรรทัดเดียวกับเนื้อหาอื่น */
+    width: 20px; /* ปรับความกว้างของ id ตามต้องการ */
+    text-align: center; /* จัดข้อความให้อยู่ตรงกลาง */
 }
 
 .card .item .content p {
     margin: 5px 0; /* ปรับระยะห่างระหว่างบรรทัดใน content */
     font-size: 14px;
     color: #555;
+}
+
+.card.hide {
+    opacity: 0.5; /* ลดความทึบแสง */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* เพิ่มเงาให้ชัดขึ้น */
 }

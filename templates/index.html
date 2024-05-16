@@ -11,8 +11,9 @@
     <h1>Fetched Data</h1>
     <div class="container">
         {% for source, stations in data.items() %}
-            <div class="card">
+            <div class="card" draggable="true"> <div class="card-header">
                 <h2>{{ source }}</h2>
+            </div>
                 {% for station in stations %}
                     <div class="item">
                         <div class="id">{{ station.id }}</div>
@@ -26,5 +27,6 @@
             </div>
         {% endfor %}
     </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
