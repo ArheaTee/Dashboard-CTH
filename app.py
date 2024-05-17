@@ -11,8 +11,9 @@ CORS(app)
 
 urls_data = {
     "Charr Temp Cycle": "http://172.31.6.60:8090/get_all_process_stations_ui/",
-    "Mako Shark 4C": "http://172.31.6.62:8090/get_all_process_stations_ui/",
-    "Lamprey Temp Cycle": "http://172.31.6.59:8090/get_all_process_stations_ui/",
+    "Lamprey Temp Cycle": "http://172.31.6.54:8090/get_all_process_stations_ui/",
+    "Mako Shark 4C": "http://172.31.6.55:8090/get_all_process_stations_ui/",
+    # "Lamprey Temp Cycle": "http://172.31.6.59:8090/get_all_process_stations_ui/",
 }
 
 def get_timestamp():
@@ -64,4 +65,4 @@ def home():
     return render_template('index.html', data=all_data)
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True, port=8001)
