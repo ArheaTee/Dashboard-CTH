@@ -4,6 +4,7 @@ from flask_pymongo import PyMongo
 import datetime
 from flask_cors import CORS
 
+
 app = Flask(__name__, static_url_path='/templates', static_folder='templates')
 app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"  # กำหนด URI ของ MongoDB
 mongo = PyMongo(app)
