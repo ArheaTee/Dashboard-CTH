@@ -12,21 +12,24 @@
     <h1>Fetched Data</h1>
     <div class="container">
       {% for source, stations in data.items() %}
-        <div class="card" draggable="true" data-card-id="{{ source }}">
-          <div class="card-header">
-            <h2>{{ source }}</h2>
-          </div>
+      <div class="card" draggable="true" data-card-id="{{ source }}">
+        <div class="card-header">
+          <h2>{{ source }}</h2>
+          <!-- <button class="toggle-button">Toggle</button>  -->
+        </div>
+        <!-- <div class="card-content"> -->
           {% for station in stations %}
             <div class="item" data-item-id="{{ station.id }}">
               <div class="id">{{ station.id }}</div>
               <div class="content">
                 <p>Station Name: {{ station.station_name }}</p>
                 <p>Result: {{ station.result }}</p>
-                <p>Timestamp: {{ station.timestamp }}</p>
+                <!-- <p>Timestamp: {{ station.timestamp }}</p> -->
               </div>
             </div>
           {% endfor %}
         </div>
+      <!-- </div> -->
       {% endfor %}
     </div>
     </div>

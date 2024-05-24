@@ -85,6 +85,13 @@ function loadCardPositions() {
 
   document.addEventListener('DOMContentLoaded', () => {
     loadCardPositions();
+
+//     const toggleButtons = document.querySelectorAll('.toggle-button');
+//     toggleButtons.forEach(button => {
+//         button.addEventListener('click', () => {
+//             button.closest('.card').classList.toggle('card-collapsed');
+//         });
+//     });
   });
 
   function drop(e) {
@@ -121,7 +128,8 @@ function loadCardPositions() {
         targetCard.parentNode.insertBefore(draggedElement, targetCard.nextSibling);
       }
     }
-  
+
+
     // เรียกใช้ saveCardPositions เพื่อบันทึกตำแหน่งใหม่
     saveCardPositions();
   
