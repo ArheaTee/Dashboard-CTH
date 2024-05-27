@@ -85,23 +85,23 @@ function loadCardPositions() {
 
   document.addEventListener('DOMContentLoaded', () => {
     loadCardPositions();
-    fetch('/get_urls/')
-        .then(response => response.json())
-        .then(urls => {
-            const sourceLinks = document.querySelectorAll('.source-link');
-            sourceLinks.forEach(link => {
-                link.addEventListener('click', event => {
-                    event.preventDefault();
-                    const source = link.dataset.source;
-                    if (urls[source]) {
-                        window.location.href = urls[source];
-                    } else {
-                        alert('URL not found for ' + source);
-                    }
-                });
-            });
-        })
-        .catch(error => console.error('Error fetching URLs:', error));
+  // fetch('/get_urls/')
+  //     .then(response => response.json())
+  //     .then(urls => {
+  //         const sourceLinks = document.querySelectorAll('.source-link');
+  //         sourceLinks.forEach(link => {
+  //             link.addEventListener('click', event => {
+  //                 event.preventDefault();
+  //                 const source = link.dataset.source;
+  //                 if (urls[source]) {
+  //                     window.location.href = urls[source];
+  //                 } else {
+  //                     alert('URL not found for ' + source);
+  //                 }
+  //             });
+  //         });
+  //     })
+  //     .catch(error => console.error('Error fetching URLs:', error));
   });
 
   function drop(e) {
