@@ -9,12 +9,14 @@
     <meta http-equiv="refresh" content="3" >
 </head>
 <body>
-    <h1>Fetched Data</h1>
+    <h1>Real Time Data</h1>
+    <button onclick="document.location='history'">History</button>
     <div class="container">
       {% for source, stations in data.items() %}
       <div class="card" draggable="true" data-card-id="{{ source }}">
         <div class="card-header">
           <h2>{{ source }}</h2>
+          <p>URL : <a href="{{ urls_data[source] | remove_suffix }}" target="_blank">{{ urls_data[source] | remove_suffix }}</a></p>
           <!-- <button class="toggle-button">Toggle</button>  -->
         </div>
         <!-- <div class="card-content"> -->

@@ -11,6 +11,13 @@ app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
 mongo = PyMongo(app)
 CORS(app)
 
+# สร้างฟิลเตอร์เพื่อเอาส่วน 'get_all_process_stations_ui/' ออก
+def remove_suffix(url):
+    return url.replace('get_all_process_stations_ui/', '')
+
+# ลงทะเบียนฟิลเตอร์ใน Jinja2
+app.jinja_env.filters['remove_suffix'] = remove_suffix
+
 @app.route('/')
 def home():
     all_data = {}

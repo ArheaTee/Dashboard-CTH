@@ -5,15 +5,27 @@ let draggedElement = null;
 
 // วนลูปตรวจสอบแต่ละ item
 items.forEach(item => {
-    const resultElement = item.querySelector('.content p:nth-child(2)'); 
-    if (resultElement.textContent.includes('PASSED')) {
-        item.style.backgroundColor = 'lightgreen';
-    } else if (resultElement.textContent.includes('FAILED')) {
-        item.style.backgroundColor = 'lightcoral';
+    const productname = item.querySelector('.content p:nth-child(1)'); // เปลี่ยนไปที่ตำแหน่งของ Station Name
+    const resultElement = item.querySelector('.content p:nth-child(2)'); // เปลี่ยนไปที่ตำแหน่งของ Result
+
+    // ตรวจสอบว่า productname มีข้อความหรือไม่
+    if (!productname.textContent.trim()) {
+        item.style.backgroundColor = 'white';
+        productname.textContent = "offline";
     } else {
-        item.style.backgroundColor = 'orange';
+        if (resultElement.textContent.includes('PASSED')) {
+            item.style.backgroundColor = 'lightgreen';
+        } else if (resultElement.textContent.includes('FAILED')) {
+            item.style.backgroundColor = 'lightcoral';
+        } else if (resultElement.textContent.includes('ABOARD')) {
+          item.style.backgroundColor = 'lightblue';
+        } else {
+            item.style.backgroundColor = 'orange';
+        }
     }
 });
+
+
 cards.forEach(card => {
     card.addEventListener('dragstart', dragStart);
     card.addEventListener('dragover', dragOver);
@@ -83,26 +95,9 @@ function loadCardPositions() {
   });
 }
 
-  document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     loadCardPositions();
-  // fetch('/get_urls/')
-  //     .then(response => response.json())
-  //     .then(urls => {
-  //         const sourceLinks = document.querySelectorAll('.source-link');
-  //         sourceLinks.forEach(link => {
-  //             link.addEventListener('click', event => {
-  //                 event.preventDefault();
-  //                 const source = link.dataset.source;
-  //                 if (urls[source]) {
-  //                     window.location.href = urls[source];
-  //                 } else {
-  //                     alert('URL not found for ' + source);
-  //                 }
-  //             });
-  //         });
-  //     })
-  //     .catch(error => console.error('Error fetching URLs:', error));
-  });
+});
 
   function drop(e) {
     e.preventDefault();
