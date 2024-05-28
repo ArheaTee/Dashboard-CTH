@@ -9,7 +9,7 @@
     <meta http-equiv="refresh" content="3" >
 </head>
 <body>
-    <h1>Real Time Data</h1>
+    <h1>Real Time</h1>
     <button onclick="document.location='history'">History</button>
     <div class="container">
       {% for source, stations in data.items() %}
@@ -20,6 +20,7 @@
           <!-- <button class="toggle-button">Toggle</button>  -->
         </div>
         <!-- <div class="card-content"> -->
+          <button>-</button>
           {% for station in stations %}
             <div class="item" data-item-id="{{ station.id }}">
               <div class="id">{{ station.id }}</div>

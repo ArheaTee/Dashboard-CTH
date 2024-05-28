@@ -15,7 +15,7 @@ items.forEach(item => {
             item.style.backgroundColor = 'lightgreen';
         } else if (resultElement.textContent.includes('FAILED')) {
             item.style.backgroundColor = 'lightcoral';
-        } else if (resultElement.textContent.includes('ABOARD')) {
+        } else if (resultElement.textContent.includes('ABORTED')) {
             item.style.backgroundColor = 'lightblue';
         } else {
             item.style.backgroundColor = 'orange';
