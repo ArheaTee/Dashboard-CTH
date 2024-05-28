@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Data Display</title>
+    <title>Real Time</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-    <meta http-equiv="refresh" content="3" >
+    <meta http-equiv="refresh" content="3">
 </head>
 <body>
     <h1>Real Time</h1>
@@ -17,22 +17,22 @@
         <div class="card-header">
           <h2>{{ source }}</h2>
           <p>URL : <a href="{{ urls_data[source] | remove_suffix }}" target="_blank">{{ urls_data[source] | remove_suffix }}</a></p>
-          <!-- <button class="toggle-button">Toggle</button>  -->
+          <p class="summary"></p>
+          <!-- <button class="toggle-button">-</button> -->
         </div>
-        <!-- <div class="card-content"> -->
-          <button>-</button>
+        <div class="card-content">
           {% for station in stations %}
             <div class="item" data-item-id="{{ station.id }}">
               <div class="id">{{ station.id }}</div>
               <div class="content">
                 <p>Station Name: {{ station.station_name }}</p>
                 <p>Result: {{ station.result }}</p>
-                <!-- <p>Timestamp: {{ station.timestamp }}</p> -->
+                <p>tset time : {{station.display}} </p>
               </div>
             </div>
           {% endfor %}
         </div>
-      <!-- </div> -->
+      </div>
       {% endfor %}
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>

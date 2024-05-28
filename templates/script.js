@@ -2,11 +2,44 @@ const cards = document.querySelectorAll('.card');
 const items = document.querySelectorAll('.item');
 let draggedElement = null;
 
+// ฟังก์ชันเพื่อแสดงหรือซ่อนเนื้อหา และสรุปผล
+document.querySelectorAll('.toggle-button').forEach(button => {
+    button.addEventListener('click', () => {
+        const card = button.closest('.card');
+        const cardContent = card.querySelector('.card-content');
+        const summaryElement = card.querySelector('.summary');
+        const items = card.querySelectorAll('.item');
+        let passCount = 0;
+        let failCount = 0;
+        let abortCount = 0;
+        let testCount = 0;
+
+        items.forEach(item => {
+            const resultElement = item.querySelector('.content p:nth-child(2)');
+            if (resultElement.textContent.includes('PASSED')) {
+                passCount++;
+            } 
+            else if (resultElement.textContent.includes('FAILED')) {
+              failCount++;
+            }
+            else if (resultElement.textContent.includes('ABORTED')) {
+              abortCount++;
+            }
+            else{
+              testCount++;
+        }
+        });
+
+        summaryElement.textContent = `PASS: ${passCount}, FAIL: ${failCount},\nABORT: ${abortCount}, TEST: ${testCount}`;
+        cardContent.classList.toggle('collapsed');
+        button.textContent = cardContent.classList.contains('collapsed') ? '+' : '-';
+      });
+});
+
 items.forEach(item => {
     const productname = item.querySelector('.content p:nth-child(1)'); // Station Name
     const resultElement = item.querySelector('.content p:nth-child(2)'); // Result
 
-    // ตรวจสอบว่า productname มีข้อความหรือไม่
     if (!productname.textContent.trim() || productname.textContent.trim() === "Station Name:") {
         item.style.backgroundColor = 'white';
         productname.textContent = "Station Name: offline";

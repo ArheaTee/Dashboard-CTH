@@ -31,6 +31,7 @@ def home():
                     "id": station["station_id"],
                     "station_name": station["station_name"],
                     "result": station.get("previous_process_plan_result", ""),
+                    "display": station.get("elapsed_seconds_for_display"),
                     "source": key,
                 }
                 for station in data
@@ -48,9 +49,9 @@ def home():
     # ส่งข้อมูลไปแสดงผลในหน้าเว็บโดยไม่มี timestamp
     return render_template('index.html', data=all_data, urls_data=urls_data)
 
-@app.route('/history')
-def history():
-    return render_template('history.html')
+# @app.route('/history')
+# def history():
+#     return render_template('history.html')
 
 if __name__ == "__main__":
     app.run(debug=True, port=8001)

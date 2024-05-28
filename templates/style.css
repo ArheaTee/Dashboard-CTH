@@ -62,3 +62,10 @@ h1 {
     color: #555;
 }
 
+.card-content.collapsed .item {
+    display: none;
+}
+
+.drag-over {
+    border: 2px dashed #000;
+}
