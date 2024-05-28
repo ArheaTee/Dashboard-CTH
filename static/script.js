@@ -33,7 +33,7 @@ document.querySelectorAll('.toggle-button').forEach(button => {
         summaryElement.textContent = `PASS: ${passCount}, FAIL: ${failCount},\nABORT: ${abortCount}, TEST: ${testCount}`;
         cardContent.classList.toggle('collapsed');
         button.textContent = cardContent.classList.contains('collapsed') ? '+' : '-';
-      });
+    });
 });
 
 items.forEach(item => {
