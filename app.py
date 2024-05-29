@@ -20,6 +20,10 @@ app.jinja_env.filters['remove_suffix'] = remove_suffix
 
 @app.route('/')
 def home():
+    return render_template('index.html')
+
+@app.route('/realtime')
+def realtime():
     all_data = {}
     for key, url in urls_data.items():
         try:
@@ -47,11 +51,11 @@ def home():
             all_data[key] = [{"error": str(e)}]
 
     # ส่งข้อมูลไปแสดงผลในหน้าเว็บโดยไม่มี timestamp
-    return render_template('index.html', data=all_data, urls_data=urls_data)
+    return render_template('realtime.html', data=all_data, urls_data=urls_data)
 
-# @app.route('/history')
-# def history():
-#     return render_template('history.html')
+@app.route('/history')
+def history():
+    return render_template('history.html')
 
 if __name__ == "__main__":
     app.run(debug=True, port=8001)
