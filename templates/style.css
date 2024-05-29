@@ -1,20 +1,60 @@
 body {
-    font-family: 'Roboto', sans-serif; /* ใช้ฟอนต์ Roboto */
-    background-color: #f4f4f4; /* เพิ่มสีพื้นหลัง body */
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
     margin: 0;
     padding: 20px;
 }
 
 h1 {
-    text-align: center; /* จัดหัวเรื่องให้อยู่ตรงกลาง */
+    text-align: center;
     margin-bottom: 30px;
 }
 
 .container {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center; /* จัดให้ card อยู่ตรงกลาง */
+    flex-direction: column;
+    align-items: center;
+}
+
+.layout-img {
+    max-width: 100%;
+    height: auto;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }
 
 .card {
@@ -40,24 +80,24 @@ h1 {
 }
 
 .card .item {
-    border-bottom: 1px solid #eee; /* เพิ่มเส้นแบ่งระหว่าง item */
-    padding: 10px 0; /* ปรับ padding ให้ห่างจากขอบบนล่าง */
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
 }
 
 .card .item:last-child {
-    border-bottom: none; /* ไม่ต้องมีเส้นแบ่งสำหรับ item สุดท้าย */
+    border-bottom: none;
 }
 
 .card .item .id {
     font-weight: bold;
     margin-bottom: 5px;
-    display: inline-block; /* ให้ id อยู่ในบรรทัดเดียวกับเนื้อหาอื่น */
-    width: 20px; /* ปรับความกว้างของ id ตามต้องการ */
-    text-align: center; /* จัดข้อความให้อยู่ตรงกลาง */
+    display: inline-block;
+    width: 20px;
+    text-align: center;
 }
 
 .card .item .content p {
-    margin: 5px 0; /* ปรับระยะห่างระหว่างบรรทัดใน content */
+    margin: 5px 0;
     font-size: 14px;
     color: #555;
 }

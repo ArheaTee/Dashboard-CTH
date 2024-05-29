@@ -2,7 +2,6 @@ const cards = document.querySelectorAll('.card');
 const items = document.querySelectorAll('.item');
 let draggedElement = null;
 
-// ฟังก์ชันเพื่อแสดงหรือซ่อนเนื้อหา และสรุปผล
 document.querySelectorAll('.toggle-button').forEach(button => {
     button.addEventListener('click', () => {
         const card = button.closest('.card');
@@ -20,25 +19,25 @@ document.querySelectorAll('.toggle-button').forEach(button => {
                 passCount++;
             } 
             else if (resultElement.textContent.includes('FAILED')) {
-              failCount++;
+                failCount++;
             }
             else if (resultElement.textContent.includes('ABORTED')) {
-              abortCount++;
+                abortCount++;
             }
-            else{
-              testCount++;
-        }
+            else {
+                testCount++;
+            }
         });
 
-        summaryElement.textContent = `PASS: ${passCount}, FAIL: ${failCount},\nABORT: ${abortCount}, TEST: ${testCount}`;
+        summaryElement.textContent = `PASS: ${passCount}, FAIL: ${failCount}, ABORT: ${abortCount}, TEST: ${testCount}`;
         cardContent.classList.toggle('collapsed');
         button.textContent = cardContent.classList.contains('collapsed') ? '+' : '-';
     });
 });
 
 items.forEach(item => {
-    const productname = item.querySelector('.content p:nth-child(1)'); // Station Name
-    const resultElement = item.querySelector('.content p:nth-child(2)'); // Result
+    const productname = item.querySelector('.content p:nth-child(1)');
+    const resultElement = item.querySelector('.content p:nth-child(2)');
 
     if (!productname.textContent.trim() || productname.textContent.trim() === "Station Name:") {
         item.style.backgroundColor = 'white';
@@ -82,7 +81,7 @@ function saveCardPositions() {
         const itemPositions = [];
 
         card.querySelectorAll('.item').forEach(item => {
-            itemPositions.push(parseInt(item.dataset.itemId)); // ใช้ itemId แทน itemIndex
+            itemPositions.push(parseInt(item.dataset.itemId));
         });
 
         cardPositions.push({ cardId, itemPositions });
