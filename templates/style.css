@@ -17,6 +17,53 @@ h1 {
     gap: 20px;
 }
 
+.summary-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.summary-item {
+    margin: 0 5px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+}
+
+#online {
+    background-color: lightgreen; /* สีเขียวเพื่อแสดงสถานะออนไลน์ */
+    display: flex;
+}
+
+.online-text {
+    margin-right: 10px;
+}
+
+#offline {
+    background-color: gray; /* สีเทาเพื่อแสดงสถานะออฟไลน์ */
+}
+#pass {
+    background-color: lightblue; /* สีฟ้าเพื่อแสดงสถานะผ่าน */
+}
+
+#test {
+    background-color: orange; /* สีเหลืองเพื่อแสดงสถานะการทดสอบ */
+}
+
+#fail {
+    background-color: red; /* สีแดงเพื่อแสดงสถานะล้มเหลว */
+}
+
+#abort {
+    background-color: lightyellow;
+    color: rgb(0, 0, 0); /* สีส้มเพื่อแสดงสถานะการยกเลิก */
+}
+
+
+
 .layout-img {
     max-width: 100%;
     height: auto;

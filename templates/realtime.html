@@ -21,6 +21,28 @@
 </div>
 
 <h1>Real Time</h1>
+<div class="summary-bar">
+  <div id="offline" class="summary-item">{{ summary.offline }}
+    <p>offline</p>
+  </div>
+  <div id="online" class="summary-item">
+    <div class="online-text">{{ summary.online }}
+      <p>online</p>
+    </div>
+    <div id="test" class="summary-item">{{ summary.test }}
+      <p>test</p>
+    </div>
+    <div id="pass" class="summary-item">{{ summary.pass }}
+      <p>pass</p>
+    </div>
+    <div id="fail" class="summary-item">{{ summary.fail }}
+      <p>fail</p>
+    </div>
+    <div id="abort" class="summary-item">{{ summary.abort }}
+      <p>abort</p>
+    </div>
+</div>
+</div>
 <div class="container">
     {% for source, stations in data.items() %}
     <div class="card" draggable="true" data-card-id="{{ source }}">
@@ -28,11 +50,10 @@
             <h2>{{ source }}</h2>
             <p>URL : <a href="{{ urls_data[source] | remove_suffix }}" target="_blank">{{ urls_data[source] | remove_suffix }}</a></p>
             <p class="summary"></p>
-            <!-- <button class="toggle-button">-</button> -->
         </div>
         <div class="card-content">
             {% for station in stations %}
-            <div class="item" data-item-id="{{ station.id }}">
+            <div class="item" data-item-id="{{ station.id }}" style="background-color: {% if station.result == 'PASSED' %}lightgreen{% elif station.result == 'FAILED' %}lightcoral{% elif station.result == 'ABORTED' %}lightblue{% elif station.station_name == 'offline' %}white{% else %}orange{% endif %};">
                 <div class="id">{{ station.id }}</div>
                 <div class="content">
                     <p>Station Name: {{ station.station_name }}</p>
@@ -59,6 +80,7 @@ window.onclick = function(e) {
   }
 }
 </script>
+
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
