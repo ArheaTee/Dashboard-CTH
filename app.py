@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 import requests
@@ -18,25 +18,37 @@ app.jinja_env.filters['remove_suffix'] = remove_suffix
 
 @app.route('/')
 def home():
-    all_data = fetch_data_from_urls()
-    summary = calculate_summary(all_data)
+    summary, all_data = fetch_data_from_urls()
     return render_template('index.html', summary=summary, data=all_data)
 
 @app.route('/realtime')
 def realtime():
-    all_data = fetch_data_from_urls()
-    summary = calculate_summary(all_data)
+    family = request.args.get('family', 'all')
+    summary, all_data = fetch_data_from_urls(family)
     return render_template('realtime.html', data=all_data, summary=summary, urls_data=urls_data)
+
+@app.route('/realtime_data')
+def realtime_data():
+    family = request.args.get('family', 'all')
+    summary, all_data = fetch_data_from_urls(family)
+    return jsonify({"summary": summary, "stations": all_data})
 
 @app.route('/history')
 def history():
     return render_template('history.html')
 
-def fetch_data_from_urls():
+def fetch_data_from_urls(family='all'):
     all_data = {}
-    for group, urls in urls_data.items():
+    summary = {group: {"online": 0, "offline": 0, "test": 0, "pass": 0, "fail": 0, "abort": 0} for group in urls_data}
+
+    if family == 'all':
+        groups = urls_data.keys()
+    else:
+        groups = [family]
+
+    for group in groups:
         all_data[group] = {}
-        for key, url in urls.items():
+        for key, url in urls_data[group].items():
             try:
                 response = requests.get(url, timeout=5)
                 response.raise_for_status()
@@ -50,6 +62,7 @@ def fetch_data_from_urls():
                         "current_status": station.get("current_status"),
                         "current_station_status": station.get("current_station_status"),
                         "source": key,
+                        "url": url
                     }
                     for station in data
                 ]
@@ -58,13 +71,15 @@ def fetch_data_from_urls():
                     for station_data in all_data[group][key]
                 ]
                 save_data_to_mongo(mongo, {key: data_with_timestamp})
+                summary[group]["online"] += 1
             except requests.exceptions.RequestException as e:
-                all_data[group][key] = [{"error": str(e)}]
-    return all_data
+                all_data[group][key] = [{"error": str(e), "url": url}]
+                summary[group]["offline"] += 1
 
-def calculate_summary(data):
-    summary = {group: {"online": 0, "offline": 0, "test": 0, "pass": 0, "fail": 0, "abort": 0} for group in urls_data}
+    calculate_summary(all_data, summary)
+    return summary, all_data
 
+def calculate_summary(data, summary):
     for group, stations in data.items():
         for key, station_data in stations.items():
             online = False
@@ -78,10 +93,7 @@ def calculate_summary(data):
                         summary[group]["fail"] += 1
                     elif station["result"] == "ABORTED":
                         summary[group]["abort"] += 1
-            if online:
-                summary[group]["online"] += 1
-            else:
-                summary[group]["offline"] += 1
+
     return summary
 
 if __name__ == "__main__":

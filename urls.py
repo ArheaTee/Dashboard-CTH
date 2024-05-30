@@ -18,10 +18,4 @@ urls_data = {
         "PALO HVCAL11": "http://172.31.6.19:8090/get_all_process_stations_ui/",
         "PALO HVCAL12": "http://172.31.6.20:8090/get_all_process_stations_ui/",
     },
-    "endurant": {
-        # เพิ่ม URLs ของ endurant ที่นี่
-    },
-    "brixia": {
-        # เพิ่ม URLs ของ brixia ที่นี่
-    }
 }

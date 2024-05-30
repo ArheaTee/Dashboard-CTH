@@ -21,51 +21,51 @@
 </div>
 
 <h1>Real Time</h1>
+
+<div class="dropdown">
+  <label for="family-select">Choose a family:</label>
+  <select id="family-select">
+    <option value="all">All</option>
+    {% for family in urls_data.keys() %}
+    <option value="{{ family }}">{{ family }}</option>
+    {% endfor %}
+  </select>
+  <button onclick="fetchData()">Go</button>
+</div>
+
 <div class="summary-bar">
-  <div id="offline" class="summary-item">{{ summary.offline }}
+  <div id="offline" class="summary-item">
     <p>offline</p>
+    <span>{{ summary.offline }}</span>
   </div>
   <div id="online" class="summary-item">
-    <div class="online-text">{{ summary.online }}
+    <div class="online-text">
       <p>online</p>
+      <span>{{ summary.online }}</span>
     </div>
-    <div id="test" class="summary-item">{{ summary.test }}
+    <div id="test" class="summary-item">
       <p>test</p>
+      <span>{{ summary.test }}</span>
     </div>
-    <div id="pass" class="summary-item">{{ summary.pass }}
+    <div id="pass" class="summary-item">
       <p>pass</p>
+      <span>{{ summary.pass }}</span>
     </div>
-    <div id="fail" class="summary-item">{{ summary.fail }}
+    <div id="fail" class="summary-item">
       <p>fail</p>
+      <span>{{ summary.fail }}</span>
     </div>
-    <div id="abort" class="summary-item">{{ summary.abort }}
+    <div id="abort" class="summary-item">
       <p>abort</p>
+      <span>{{ summary.abort }}</span>
     </div>
+  </div>
 </div>
+
+<div class="container" id="data-container">
+  <!-- ข้อมูลจาก API จะมาแสดงที่นี่ -->
 </div>
-<div class="container">
-    {% for source, stations in data.items() %}
-    <div class="card" draggable="true" data-card-id="{{ source }}">
-        <div class="card-header">
-            <h2>{{ source }}</h2>
-            <p>URL : <a href="{{ urls_data[source] | remove_suffix }}" target="_blank">{{ urls_data[source] | remove_suffix }}</a></p>
-            <p class="summary"></p>
-        </div>
-        <div class="card-content">
-            {% for station in stations %}
-            <div class="item" data-item-id="{{ station.id }}" style="background-color: {% if station.result == 'PASSED' %}lightgreen{% elif station.result == 'FAILED' %}lightcoral{% elif station.result == 'ABORTED' %}lightblue{% elif station.station_name == 'offline' %}white{% else %}orange{% endif %};">
-                <div class="id">{{ station.id }}</div>
-                <div class="content">
-                    <p>Station Name: {{ station.station_name }}</p>
-                    <p>Result: {{ station.result }}</p>
-                    <p>Test time: {{ station.display }}</p>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endfor %}
-</div>
+
 <script>
 function myFunction() {
   document.getElementById("myDropdown").classList.toggle("show");
@@ -77,6 +77,55 @@ window.onclick = function(e) {
     if (myDropdown.classList.contains('show')) {
       myDropdown.classList.remove('show');
     }
+  }
+}
+
+function fetchData() {
+  const family = document.getElementById("family-select").value;
+  fetch(`/realtime_data?family=${family}`)
+    .then(response => response.json())
+    .then(data => {
+      // อัปเดตข้อมูลในหน้าจอ
+      document.getElementById("data-container").innerHTML = renderCards(data.stations);
+      document.getElementById("offline").querySelector('span').textContent = data.summary.offline;
+      document.getElementById("online").querySelector('span').textContent = data.summary.online;
+      document.getElementById("test").querySelector('span').textContent = data.summary.test;
+      document.getElementById("pass").querySelector('span').textContent = data.summary.pass;
+      document.getElementById("fail").querySelector('span').textContent = data.summary.fail;
+      document.getElementById("abort").querySelector('span').textContent = data.summary.abort;
+    });
+}
+
+function renderCards(stations) {
+  return stations.map(station => `
+    <div class="card" draggable="true" data-card-id="${station.source}">
+        <div class="card-header">
+            <h2>${station.source}</h2>
+            <p>URL : <a href="${station.url}" target="_blank">${station.url}</a></p>
+            <p class="summary"></p>
+        </div>
+        <div class="card-content">
+            ${station.items.map(item => `
+              <div class="item" data-item-id="${item.id}" style="background-color: ${getColor(item.result)};">
+                <div class="id">${item.id}</div>
+                <div class="content">
+                    <p>Station Name: ${item.station_name}</p>
+                    <p>Result: ${item.result}</p>
+                    <p>Test time: ${item.display}</p>
+                </div>
+              </div>
+            `).join('')}
+        </div>
+    </div>
+  `).join('');
+}
+
+function getColor(result) {
+  switch(result) {
+    case 'PASSED': return 'lightgreen';
+    case 'FAILED': return 'lightcoral';
+    case 'ABORTED': return 'lightblue';
+    default: return 'orange';
   }
 }
 </script>
