@@ -21,28 +21,32 @@
 </div>
 
 <h1>Summary</h1>
-<div class="summary-bar">
-  <div id="offline" class="summary-item">{{ summary.offline }}
-    <p>offline</p>
-  </div>
+{% for group, summary in summary.items() %}
+<div class="group-summary">
+    <h2>{{ group }}</h2>
+    <div class="summary-bar">
+        <div id="offline" class="summary-item">{{ summary.offline }}
+          <p>offline</p>
+        </div>
   <div id="online" class="summary-item">
     <div class="online-text">{{ summary.online }}
-      <p>online</p>
-    </div>
-    <div id="test" class="summary-item">{{ summary.test }}
-      <p>test</p>
-    </div>
-    <div id="pass" class="summary-item">{{ summary.pass }}
-      <p>pass</p>
-    </div>
-    <div id="fail" class="summary-item">{{ summary.fail }}
-      <p>fail</p>
-    </div>
-    <div id="abort" class="summary-item">{{ summary.abort }}
-      <p>abort</p>
+          <p>online</p>
+          <div id="test" class="summary-item">{{ summary.test }}
+            <p>test</p>
+          </div>
+          <div id="pass" class="summary-item">{{ summary.pass }}
+            <p>pass</p>
+          </div>
+          <div id="fail" class="summary-item">{{ summary.fail }}
+            <p>fail</p>
+          </div>
+          <div id="abort" class="summary-item">{{ summary.abort }}
+            <p>abort</p>
+          </div>
+      </div>
     </div>
 </div>
-</div>
+{% endfor %}
 <div class="container">
     <a href="/realtime">
         <img src="{{ url_for('static', filename='Layout-room.png') }}" alt="Room Layout" class="layout-img">

@@ -1,33 +1,31 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 import requests
 import datetime
-from urls import urls_data  # นำเข้า urls_data จาก urls.py
-from mongo import save_data_to_mongo  # นำเข้า save_data_to_mongo จาก mongo.py
+from urls import urls_data
+from mongo import save_data_to_mongo
 
 app = Flask(__name__, static_url_path='/templates', static_folder='templates')
 app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
 mongo = PyMongo(app)
 CORS(app)
 
-# สร้างฟิลเตอร์เพื่อเอาส่วน 'get_all_process_stations_ui/' ออก
 def remove_suffix(url):
     return url.replace('get_all_process_stations_ui/', '')
 
-# ลงทะเบียนฟิลเตอร์ใน Jinja2
 app.jinja_env.filters['remove_suffix'] = remove_suffix
 
 @app.route('/')
 def home():
-    all_data, offline_urls, online_urls = fetch_data_from_urls()
-    summary = calculate_summary(all_data, offline_urls, online_urls)
-    return render_template('index.html', summary=summary)
+    all_data, offline_urls = fetch_data_from_urls()
+    summary = calculate_summary(all_data, offline_urls)
+    return render_template('index.html', summary=summary, data=all_data)
 
 @app.route('/realtime')
 def realtime():
-    all_data, offline_urls, online_urls = fetch_data_from_urls()
-    summary = calculate_summary(all_data, offline_urls, online_urls)
+    all_data, offline_urls = fetch_data_from_urls()
+    summary = calculate_summary(all_data, offline_urls)
     return render_template('realtime.html', data=all_data, summary=summary, urls_data=urls_data)
 
 @app.route('/history')
@@ -36,8 +34,7 @@ def history():
 
 def fetch_data_from_urls():
     all_data = {}
-    offline_urls = []
-    online_urls = []
+    offline_urls = set(urls_data.keys())
     for key, url in urls_data.items():
         try:
             response = requests.get(url, timeout=5)
@@ -55,22 +52,19 @@ def fetch_data_from_urls():
                 }
                 for station in data
             ]
-            # สร้างสำเนาของข้อมูลที่มี timestamp สำหรับบันทึกใน MongoDB
             data_with_timestamp = [
                 {**station_data, "timestamp": datetime.datetime.now()}
                 for station_data in all_data[key]
             ]
-            # บันทึกข้อมูลไปยัง MongoDB
             save_data_to_mongo(mongo, {key: data_with_timestamp})
-            online_urls.append(key)
+            offline_urls.remove(key)
         except requests.exceptions.RequestException as e:
             all_data[key] = [{"error": str(e)}]
-            offline_urls.append(key)
-    return all_data, offline_urls, online_urls
+    return all_data, offline_urls
 
-def calculate_summary(data, offline_urls, online_urls):
+def calculate_summary(data, offline_urls):
     summary = {
-        "online": len(online_urls),
+        "online": 0,
         "offline": len(offline_urls),
         "test": 0,
         "pass": 0,
@@ -79,16 +73,19 @@ def calculate_summary(data, offline_urls, online_urls):
     }
 
     for key, stations in data.items():
-        if key not in offline_urls:
-            for station in stations:
-                if station.get("station_name") != "offline":
-                    summary["test"] += 1
-                    if station.get("result") == "PASSED":
-                        summary["pass"] += 1
-                    elif station.get("result") == "FAILED":
-                        summary["fail"] += 1
-                    elif station.get("result") == "ABORTED":
-                        summary["abort"] += 1
+        online = False
+        for station in stations:
+            if "error" not in station:
+                online = True
+                summary["test"] += 1
+                if station["result"] == "PASSED":
+                    summary["pass"] += 1
+                elif station["result"] == "FAILED":
+                    summary["fail"] += 1
+                elif station["result"] == "ABORTED":
+                    summary["abort"] += 1
+        if online:
+            summary["online"] += 1
 
     return summary
 
