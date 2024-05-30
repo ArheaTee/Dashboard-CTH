@@ -1,41 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Real Time</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-    <meta http-equiv="refresh" content="3">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <h1>Real Time</h1>
-    <button onclick="document.location='history'">History</button>
-    <button onclick="document.location='/'">Home</button>
-    <div class="container">
-      {% for source, stations in data.items() %}
-      <div class="card" draggable="true" data-card-id="{{ source }}">
+<body style="background-color:white;">
+
+<div class="navbar">
+  <a href="/">Home</a>
+  <a href="/realtime">RealTime</a>
+  <div class="dropdown">
+    <button class="dropbtn" onclick="myFunction()">Dropdown
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content" id="myDropdown">
+      <a href="/history">History</a>
+    </div>
+  </div> 
+</div>
+
+<h1>Real Time</h1>
+<div class="container">
+    {% for source, stations in data.items() %}
+    <div class="card" draggable="true" data-card-id="{{ source }}">
         <div class="card-header">
-          <h2>{{ source }}</h2>
-          <p>URL : <a href="{{ urls_data[source] | remove_suffix }}" target="_blank">{{ urls_data[source] | remove_suffix }}</a></p>
-          <p class="summary"></p>
-          <!-- <button class="toggle-button">-</button> -->
+            <h2>{{ source }}</h2>
+            <p>URL : <a href="{{ urls_data[source] | remove_suffix }}" target="_blank">{{ urls_data[source] | remove_suffix }}</a></p>
+            <p class="summary"></p>
+            <!-- <button class="toggle-button">-</button> -->
         </div>
         <div class="card-content">
-          {% for station in stations %}
+            {% for station in stations %}
             <div class="item" data-item-id="{{ station.id }}">
-              <div class="id">{{ station.id }}</div>
-              <div class="content">
-                <p>Station Name: {{ station.station_name }}</p>
-                <p>Result: {{ station.result }}</p>
-                <p>tset time : {{station.display}} </p>
-              </div>
+                <div class="id">{{ station.id }}</div>
+                <div class="content">
+                    <p>Station Name: {{ station.station_name }}</p>
+                    <p>Result: {{ station.result }}</p>
+                    <p>Test time: {{ station.display }}</p>
+                </div>
             </div>
-          {% endfor %}
+            {% endfor %}
         </div>
-      </div>
-      {% endfor %}
     </div>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    {% endfor %}
+</div>
+<script>
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+window.onclick = function(e) {
+  if (!e.target.matches('.dropbtn')) {
+    var myDropdown = document.getElementById("myDropdown");
+    if (myDropdown.classList.contains('show')) {
+      myDropdown.classList.remove('show');
+    }
+  }
+}
+</script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
