@@ -145,7 +145,14 @@ h2 {
     cursor: grab;
     width: 300px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-height: 400px; /* ความสูงสูงสุดที่ card-content จะสามารถแสดงผลได้ */
+    overflow-y: auto; /* ใช้ scroll bar ในแนวตั้งเมื่อมีเนื้อหาเกิน */
 }
+
+/* .card-content {
+    max-height: 400px; /* ความสูงสูงสุดที่ card-content จะสามารถแสดงผลได้ */
+    /* overflow-y: auto; /* ใช้ scroll bar ในแนวตั้งเมื่อมีเนื้อหาเกิน */
+/* } */ 
 
 .card-header {
     margin-bottom: 15px;
