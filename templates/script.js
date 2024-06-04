@@ -177,34 +177,40 @@ function dragLeave(e) {
         targetCard.classList.remove('drag-over');
     }
 }
+
 function fetchData() {
     const family = document.getElementById("family-select").value;
     fetch(`/realtime_data?family=${family}`)
       .then(response => response.json())
       .then(data => {
         document.getElementById("data-container").innerHTML = renderCards(data.stations);
-        document.getElementById("offline").querySelector('span').textContent = data.summary.offline;
-        document.getElementById("online").querySelector('span').textContent = data.summary.online;
-        document.getElementById("test").querySelector('span').textContent = data.summary.test;
-        document.getElementById("pass").querySelector('span').textContent = data.summary.pass;
-        document.getElementById("fail").querySelector('span').textContent = data.summary.fail;
-        document.getElementById("abort").querySelector('span').textContent = data.summary.abort;
       });
-  }
-  
-  function renderCards(stations) {
-    let html = '';
-    for (const [group, stationData] of Object.entries(stations)) {
-      for (const [source, items] of Object.entries(stationData)) {
-        html += `
-          <div class="card" draggable="true" data-card-id="${source}">
-            <div class="card-header">
-              <h2>${source}</h2>
-              <p>URL : <a href="${items[0].url}" target="_blank">${items[0].url}</a></p>
-              <p class="summary"></p>
-            </div>
-            <div class="card-content">
-              ${items.map(item => `
+}
+
+function renderCards(stations) {
+  let html = '';
+  for (const [group, stationData] of Object.entries(stations)) {
+    for (const [source, items] of Object.entries(stationData)) {
+      const url = truncateUrl(items[0].url);
+      const isOffline = !items || items.length === 0;
+
+      html += `
+        <div class="card" draggable="true" data-card-id="${source}">
+          <div class="card-header">
+            <h2>${source}</h2>
+            <p>URL : <a href="${url}" target="_blank">${url}</a></p>
+            <p class="summary"></p>
+          </div>
+          <div class="card-content">
+            ${isOffline ? `
+              <div class="item" style="background-color: white;">
+                <div class="content">
+                  <p>Station Name: offline</p>
+                  <p>Result: offline</p>
+                  <p>Test time: offline</p>
+                </div>
+              </div>` :
+              items.map(item => `
                 <div class="item" data-item-id="${item.id}" style="background-color: ${getColor(item.result)};">
                   <div class="id">${item.id}</div>
                   <div class="content">
@@ -214,20 +220,23 @@ function fetchData() {
                   </div>
                 </div>
               `).join('')}
-            </div>
           </div>
-        `;
-      }
-    }
-    return html;
-  }
-  
-  function getColor(result) {
-    switch(result) {
-      case 'PASSED': return 'lightgreen';
-      case 'FAILED': return 'lightcoral';
-      case 'ABORTED': return 'lightblue';
-      default: return 'orange';
+        </div>
+      `;
     }
   }
-  
+  return html;
+}
+
+function truncateUrl(url) {
+  return url.replace('get_all_process_stations_ui/', '');
+}
+
+function getColor(result) {
+  switch(result) {
+    case 'PASSED': return 'lightgreen';
+    case 'FAILED': return 'lightcoral';
+    case 'ABORTED': return 'lightblue';
+    default: return 'orange';
+  }
+}

@@ -33,7 +33,7 @@
   <button onclick="fetchData()">Go</button>
 </div>
 
-<div class="summary-bar">
+<!-- <div class="summary-bar">
   <div id="offline" class="summary-item">
     <p>offline</p>
     <span>{{ summary.offline }}</span>
@@ -60,7 +60,7 @@
       <span>{{ summary.abort }}</span>
     </div>
   </div>
-</div>
+</div> -->
 
 <div class="container" id="data-container">
   <!-- ข้อมูลจาก API จะมาแสดงที่นี่ -->
@@ -87,12 +87,6 @@ function fetchData() {
     .then(data => {
       // อัปเดตข้อมูลในหน้าจอ
       document.getElementById("data-container").innerHTML = renderCards(data.stations);
-      document.getElementById("offline").querySelector('span').textContent = data.summary.offline;
-      document.getElementById("online").querySelector('span').textContent = data.summary.online;
-      document.getElementById("test").querySelector('span').textContent = data.summary.test;
-      document.getElementById("pass").querySelector('span').textContent = data.summary.pass;
-      document.getElementById("fail").querySelector('span').textContent = data.summary.fail;
-      document.getElementById("abort").querySelector('span').textContent = data.summary.abort;
     });
 }
 
@@ -101,7 +95,7 @@ function renderCards(stations) {
     <div class="card" draggable="true" data-card-id="${station.source}">
         <div class="card-header">
             <h2>${station.source}</h2>
-            <p>URL : <a href="${station.url}" target="_blank">${station.url}</a></p>
+            <p>URL : <a href="${truncateUrl(station.url)}" target="_blank">${truncateUrl(station.url)}</a></p>
             <p class="summary"></p>
         </div>
         <div class="card-content">
@@ -109,15 +103,19 @@ function renderCards(stations) {
               <div class="item" data-item-id="${item.id}" style="background-color: ${getColor(item.result)};">
                 <div class="id">${item.id}</div>
                 <div class="content">
-                    <p>Station Name: ${item.station_name}</p>
-                    <p>Result: ${item.result}</p>
-                    <p>Test time: ${item.display}</p>
+                    <p>Station Name: ${item.station_name || 'offline'}</p>
+                    <p>Result: ${item.result || 'offline'}</p>
+                    <p>Test time: ${item.display || 'offline'}</p>
                 </div>
               </div>
             `).join('')}
         </div>
     </div>
   `).join('');
+}
+
+function truncateUrl(url) {
+  return url.replace('get_all_process_stations_ui/', '');
 }
 
 function getColor(result) {
