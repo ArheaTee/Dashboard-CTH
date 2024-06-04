@@ -233,10 +233,11 @@ function truncateUrl(url) {
 }
 
 function getColor(result) {
-  switch(result) {
-    case 'PASSED': return 'lightgreen';
-    case 'FAILED': return 'lightcoral';
-    case 'ABORTED': return 'lightblue';
-    default: return 'orange';
-  }
+    switch(result) {
+        case 'PASSED': return 'lightgreen';
+        case 'FAILED': return 'lightcoral';
+        case 'ABORTED': return 'lightblue';
+        case '': return 'orange';
+        default: return 'white';
+    }
 }
