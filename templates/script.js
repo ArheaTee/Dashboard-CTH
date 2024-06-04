@@ -72,57 +72,6 @@ function dragOver(e) {
     e.preventDefault();
 }
 
-function saveCardPositions() {
-    const cardPositions = [];
-    const allCards = document.querySelectorAll('.card');
-
-    allCards.forEach(card => {
-        const cardId = card.dataset.cardId;
-        const itemPositions = [];
-
-        card.querySelectorAll('.item').forEach(item => {
-            itemPositions.push(parseInt(item.dataset.itemId));
-        });
-
-        cardPositions.push({ cardId, itemPositions });
-    });
-
-    localStorage.setItem('cardPositions', JSON.stringify(cardPositions));
-}
-
-function loadCardPositions() {
-    const cardPositions = JSON.parse(localStorage.getItem('cardPositions')) || [];
-    const container = document.querySelector('.container');
-
-    const cardItemsMap = new Map();
-    cardPositions.forEach(({ cardId, itemPositions }) => {
-        const card = document.querySelector(`[data-card-id="${cardId}"]`);
-        if (card) {
-            cardItemsMap.set(cardId, Array.from(card.querySelectorAll('.item')));
-        }
-    });
-
-    cardPositions.forEach(({ cardId, itemPositions }) => {
-        const card = document.querySelector(`[data-card-id="${cardId}"]`);
-        if (card) {
-            container.appendChild(card);
-
-            const items = cardItemsMap.get(cardId);
-            items.sort((a, b) => {
-                const aIndex = itemPositions.indexOf(parseInt(a.dataset.itemId, 10));
-                const bIndex = itemPositions.indexOf(parseInt(b.dataset.itemId, 10));
-                return aIndex - bIndex;
-            });
-
-            items.forEach(item => card.appendChild(item));
-        }
-    });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    loadCardPositions();
-});
-
 function drop(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -178,13 +127,68 @@ function dragLeave(e) {
     }
 }
 
+function saveCardPositions() {
+    const cardPositions = [];
+    const allCards = document.querySelectorAll('.card');
+
+    allCards.forEach(card => {
+        const cardId = card.dataset.cardId;
+        const itemPositions = [];
+
+        card.querySelectorAll('.item').forEach(item => {
+            itemPositions.push(parseInt(item.dataset.itemId));
+        });
+
+        cardPositions.push({ cardId, itemPositions });
+    });
+
+    localStorage.setItem('cardPositions', JSON.stringify(cardPositions));
+}
+
+function loadCardPositions() {
+    const cardPositions = JSON.parse(localStorage.getItem('cardPositions')) || [];
+    const container = document.querySelector('.container');
+
+    const cardItemsMap = new Map();
+    cardPositions.forEach(({ cardId, itemPositions }) => {
+        const card = document.querySelector(`[data-card-id="${cardId}"]`);
+        if (card) {
+            cardItemsMap.set(cardId, Array.from(card.querySelectorAll('.item')));
+        }
+    });
+
+    cardPositions.forEach(({ cardId, itemPositions }) => {
+        const card = document.querySelector(`[data-card-id="${cardId}"]`);
+        if (card) {
+            container.appendChild(card);
+
+            const items = cardItemsMap.get(cardId);
+            items.sort((a, b) => {
+                const aIndex = itemPositions.indexOf(parseInt(a.dataset.itemId, 10));
+                const bIndex = itemPositions.indexOf(parseInt(b.dataset.itemId, 10));
+                return aIndex - bIndex;
+            });
+
+            items.forEach(item => card.appendChild(item));
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadCardPositions();
+});
+
 function fetchData() {
     const family = document.getElementById("family-select").value;
+    showLoading();
     fetch(`/realtime_data?family=${family}`)
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById("data-container").innerHTML = renderCards(data.stations);
-      });
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("data-container").innerHTML = renderCards(data.stations);
+        })
+        .finally(() => {
+            hideLoading();
+        });
 }
 
 function renderCards(stations) {

@@ -4,6 +4,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+    .loading-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        display: none; /* เริ่มต้นเป็น hidden */
+    }
+
+    .loading {
+        width: 48px;
+        height: 48px;
+        border: 5px solid #FFF;
+        border-bottom-color: #FF3D00;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
 </head>
 <body style="background-color:white;">
 
@@ -33,34 +68,9 @@
   <button onclick="fetchData()">Go</button>
 </div>
 
-<!-- <div class="summary-bar">
-  <div id="offline" class="summary-item">
-    <p>offline</p>
-    <span>{{ summary.offline }}</span>
-  </div>
-  <div id="online" class="summary-item">
-    <div class="online-text">
-      <p>online</p>
-      <span>{{ summary.online }}</span>
-    </div>
-    <div id="test" class="summary-item">
-      <p>test</p>
-      <span>{{ summary.test }}</span>
-    </div>
-    <div id="pass" class="summary-item">
-      <p>pass</p>
-      <span>{{ summary.pass }}</span>
-    </div>
-    <div id="fail" class="summary-item">
-      <p>fail</p>
-      <span>{{ summary.fail }}</span>
-    </div>
-    <div id="abort" class="summary-item">
-      <p>abort</p>
-      <span>{{ summary.abort }}</span>
-    </div>
-  </div>
-</div> -->
+<div id="loading" class="loading-container">
+    <div class="loading"></div>
+</div>
 
 <div class="container" id="data-container">
   <!-- ข้อมูลจาก API จะมาแสดงที่นี่ -->
@@ -80,14 +90,25 @@ window.onclick = function(e) {
   }
 }
 
+function showLoading() {
+    document.getElementById('loading').style.display = 'flex';
+}
+
+function hideLoading() {
+    document.getElementById('loading').style.display = 'none';
+}
+
 function fetchData() {
-  const family = document.getElementById("family-select").value;
-  fetch(`/realtime_data?family=${family}`)
-    .then(response => response.json())
-    .then(data => {
-      // อัปเดตข้อมูลในหน้าจอ
-      document.getElementById("data-container").innerHTML = renderCards(data.stations);
-    });
+    const family = document.getElementById("family-select").value;
+    showLoading();
+    fetch(`/realtime_data?family=${family}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("data-container").innerHTML = renderCards(data.stations);
+        })
+        .finally(() => {
+            hideLoading();
+        });
 }
 
 function renderCards(stations) {
