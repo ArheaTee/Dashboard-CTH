@@ -4,6 +4,84 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        background-color: #333;
+        overflow: hidden;
+    }
+    .navbar a, .dropdown .dropbtn {
+        float: left;
+        display: block;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+    .dropdown {
+        float: left;
+        overflow: hidden;
+    }
+    .dropdown .dropbtn {
+        font-size: 16px;
+        border: none;
+        outline: none;
+        color: white;
+        background-color: inherit;
+        font-family: inherit;
+        margin: 0;
+    }
+    .navbar a:hover, .dropdown:hover .dropbtn {
+        background-color: red;
+    }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+    .dropdown-content a {
+        float: none;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+    }
+    .dropdown-content a:hover {
+        background-color: #ddd;
+    }
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    .summary-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .group-summary {
+        margin: 10px;
+        text-align: center;
+    }
+    .summary-item {
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        margin: 5px 0;
+    }
+    .layout-img-container {
+        text-align: center;
+        width: 100%;
+        margin: 20px 0;
+    }
+    .layout-img {
+        width: 80%;
+        height: auto;
+    }
+</style>
 </head>
 <body style="background-color:white;">
 
@@ -21,34 +99,38 @@
 </div>
 
 <h1>Summary</h1>
-{% for group, summary in summary.items() %}
-<div class="group-summary">
-    <h2>{{ group }}</h2>
-    <div class="summary-bar">
-        <div id="offline" class="summary-item">{{ summary.offline }}
-          <p>offline</p>
+
+<div class="summary-container">
+    {% for group, summary in summary.items() %}
+    <div class="group-summary">
+        <h2>{{ group }}</h2>
+        <div class="summary-bar">
+            <div id="offline" class="summary-item">{{ summary.offline }}
+              <p>offline</p>
+            </div>
+            <div id="online" class="summary-item">
+                <div class="online-text">{{ summary.online }}
+                  <p>online</p>
+                </div>
+                <div id="test" class="summary-item">{{ summary.test }}
+                  <p>test</p>
+                </div>
+                <div id="pass" class="summary-item">{{ summary.pass }}
+                  <p>pass</p>
+                </div>
+                <div id="fail" class="summary-item">{{ summary.fail }}
+                  <p>fail</p>
+                </div>
+                <div id="abort" class="summary-item">{{ summary.abort }}
+                  <p>abort</p>
+                </div>
+            </div>
         </div>
-  <div id="online" class="summary-item">
-    <div class="online-text">{{ summary.online }}
-          <p>online</p>
     </div>
-          <div id="test" class="summary-item">{{ summary.test }}
-            <p>test</p>
-          </div>
-          <div id="pass" class="summary-item">{{ summary.pass }}
-            <p>pass</p>
-          </div>
-          <div id="fail" class="summary-item">{{ summary.fail }}
-            <p>fail</p>
-          </div>
-          <div id="abort" class="summary-item">{{ summary.abort }}
-            <p>abort</p>
-          </div>
-      </div>
-    </div>
+    {% endfor %}
 </div>
-{% endfor %}
-<div class="container">
+
+<div class="layout-img-container">
     <a href="/realtime">
         <img src="{{ url_for('static', filename='Layout-room.png') }}" alt="Room Layout" class="layout-img">
     </a>
