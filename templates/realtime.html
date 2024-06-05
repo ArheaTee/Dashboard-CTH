@@ -66,6 +66,7 @@
     {% endfor %}
   </select>
   <button onclick="fetchData()">Go</button>
+  <button onclick="toggleUndefinedCards()">Toggle Undefined Cards</button>
 </div>
 
 <div id="loading" class="loading-container">
@@ -113,6 +114,22 @@ function fetchData() {
 
 function setupAutoRefresh(interval) {
     setInterval(fetchData, interval);
+}
+
+function toggleUndefinedCards() {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        const resultElements = card.querySelectorAll('.content p:nth-child(2)');
+        let hideCard = false;
+        resultElements.forEach(resultElement => {
+            if (resultElement.textContent.includes('undefined')) {
+                hideCard = true;
+            }
+        });
+        if (hideCard) {
+            card.classList.toggle('hidden');
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
