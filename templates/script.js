@@ -190,7 +190,8 @@ function fetchData() {
             hideLoading();
         });
 }
-
+        //    <h2><a${source}<a href="${url}"</a></h2>
+        //      <p>URL : <a href="${url}" target="_blank">${url}</a></p>
 function renderCards(stations) {
   let html = '';
   for (const [group, stationData] of Object.entries(stations)) {
@@ -201,8 +202,7 @@ function renderCards(stations) {
       html += `
         <div class="card" draggable="true" data-card-id="${source}">
           <div class="card-header">
-            <h2>${source}</h2>
-            <p>URL : <a href="${url}" target="_blank">${url}</a></p>
+          <h2><a href="${url}">${source}</a></h2>
             <p class="summary"></p>
           </div>
           <div class="card-content">
