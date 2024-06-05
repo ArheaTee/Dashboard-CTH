@@ -67,6 +67,11 @@ window.onclick = function(e) {
     }
   }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchData();
+    setupAutoRefresh(3 * 60 * 1000); // 3 นาที
+});
 </script>
 
 </body>
