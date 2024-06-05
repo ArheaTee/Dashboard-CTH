@@ -66,7 +66,8 @@
     {% endfor %}
   </select>
   <button onclick="fetchData()">Go</button>
-  <button onclick="toggleUndefinedCards()">Toggle Undefined Cards</button>
+  <label for="toggle-undefined">Hide Cards</label>
+  <input type="checkbox" id="toggle-undefined" onclick="toggleUndefinedCards()">
 </div>
 
 <div id="loading" class="loading-container">
@@ -101,11 +102,13 @@ function hideLoading() {
 
 function fetchData() {
     const family = document.getElementById("family-select").value;
+    toggleUndefinedCards();
     showLoading();
     fetch(`/realtime_data?family=${family}`)
         .then(response => response.json())
         .then(data => {
             document.getElementById("data-container").innerHTML = renderCards(data.stations);
+            // toggleUndefinedCards(); // ซ่อนการ์ดที่มีค่า undefined ถ้า checkbox ถูกเลือก
         })
         .finally(() => {
             hideLoading();
@@ -117,6 +120,7 @@ function setupAutoRefresh(interval) {
 }
 
 function toggleUndefinedCards() {
+    const hideUndefined = document.getElementById('toggle-undefined').checked;
     const cards = document.querySelectorAll('.card');
     cards.forEach(card => {
         const resultElements = card.querySelectorAll('.content p:nth-child(2)');
@@ -127,7 +131,7 @@ function toggleUndefinedCards() {
             }
         });
         if (hideCard) {
-            card.classList.toggle('hidden');
+            card.style.display = hideUndefined ? 'none' : '';
         }
     });
 }
