@@ -35,5 +35,11 @@ urls_data = {
         "PAL-FCT-CAM/LOWSTONEHENGE FCT": "http://172.31.6.28:8090/get_all_process_stations_ui/",
         "CAMERON/LOWELL-4C#1": "http://172.31.6.29:8090/get_all_process_stations_ui/",
         "PALOMAR SERVER": "http://172.31.6.30:8090/get_all_process_stations_ui/",
-    },
+        },
+    "Brixia": {
+        "Brixia 4C# 1" : "http://172.31.13.7:8090/get_all_process_stations_ui/",
+        },
+    "Endurance": {
+        "Endurance GPU TFT #1" : "http://172.31.7.95:8090/get_all_process_stations_ui/",
+        },
 }
