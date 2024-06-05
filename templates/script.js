@@ -190,8 +190,7 @@ function fetchData() {
             hideLoading();
         });
 }
-        //    <h2><a${source}<a href="${url}"</a></h2>
-        //      <p>URL : <a href="${url}" target="_blank">${url}</a></p>
+
 function renderCards(stations) {
   let html = '';
   for (const [group, stationData] of Object.entries(stations)) {
@@ -245,3 +244,9 @@ function getColor(result) {
         default: return 'white';
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('button').addEventListener('click', fetchData);
+    fetchData();
+    setInterval(fetchData, 3 * 60 * 1000); // Refresh every 3 minutes
+});

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, make_response
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 import requests
@@ -19,13 +19,17 @@ app.jinja_env.filters['remove_suffix'] = remove_suffix
 @app.route('/')
 def home():
     summary, all_data = fetch_data_from_urls()
-    return render_template('index.html', summary=summary, data=all_data)
+    response = make_response(render_template('index.html', summary=summary, data=all_data))
+    response.headers['Cache-Control'] = 'public, max-age=3600'  # 1 hour
+    return response
 
 @app.route('/realtime')
 def realtime():
     family = request.args.get('family', 'all')
     summary, all_data = fetch_data_from_urls(family)
-    return render_template('realtime.html', data=all_data, summary=summary, urls_data=urls_data)
+    response = make_response(render_template('realtime.html', data=all_data, summary=summary, urls_data=urls_data))
+    response.headers['Cache-Control'] = 'public, max-age=3600'  # 1 hour
+    return response
 
 @app.route('/realtime_data')
 def realtime_data():
@@ -35,7 +39,9 @@ def realtime_data():
 
 @app.route('/history')
 def history():
-    return render_template('history.html')
+    response = make_response(render_template('history.html'))
+    response.headers['Cache-Control'] = 'public, max-age=3600'  # 1 hour
+    return response
 
 def fetch_data_from_urls(family='all'):
     all_data = {}

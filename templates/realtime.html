@@ -110,44 +110,15 @@ function fetchData() {
             hideLoading();
         });
 }
-// <p>URL : <a href="${truncateUrl(station.url)}" target="_blank">${truncateUrl(station.url)}</a></p>
-// function renderCards(stations) {
-//   return stations.map(station => `
-//     <div class="card" draggable="true" data-card-id="${station.source}">
-//         <div class="card-header">
-//             <h2><a>${station.source}href="${truncateUrl(station.url)}"}</a></h2>
-//             <p class="summary"></p>
-//         </div>
-//         <div class="card-content">
-//             ${station.items.map(item => `
-//               <div class="item" data-item-id="${item.id}" style="background-color: ${getColor(item.result)};">
-//                 <div class="id">${item.id}</div>
-//                 <div class="content">
-//                     <p>Station Name: ${item.station_name || 'offline'}</p>
-//                     <p>Result: ${item.result || 'offline'}</p>
-//                     <p>Test time: ${item.display || 'offline'}</p>
-//                 </div>
-//               </div>
-//             `).join('')}
-//         </div>
-//     </div>
-//   `).join('');
-// }
 
-// function truncateUrl(url) {
-//   return url.replace('get_all_process_stations_ui/', '');
-// }
+function setupAutoRefresh(interval) {
+    setInterval(fetchData, interval);
+}
 
-// function getColor(result) {
-//     switch(result) {
-//         case 'PASSED': return 'lightgreen';
-//         case 'FAILED': return 'lightcoral';
-//         case 'ABORTED': return 'lightblue';
-//         case '': return 'orange';
-//         default: return 'white';
-//     }
-// }
-
+document.addEventListener('DOMContentLoaded', () => {
+    fetchData();
+    setupAutoRefresh(3 * 60 * 1000); // 3 นาที
+});
 </script>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
