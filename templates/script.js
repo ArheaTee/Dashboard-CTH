@@ -140,6 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchData().then(() => {
         setInterval(() => {
             fetchData();
-        }, 3 * 60 * 1000); // Refresh every 3 minutes
+        }, 2 * 60 * 1000); // Refresh every 2 minutes
     });
 });

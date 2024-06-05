@@ -66,8 +66,10 @@
     {% endfor %}
   </select>
   <button onclick="fetchData()">Go</button>
-  <label for="toggle-undefined">Hide Cards</label>
-  <input type="checkbox" id="toggle-undefined" onclick="toggleUndefinedCards()">
+  <div>
+    <input type="checkbox" id="toggle-undefined" onclick="toggleUndefinedCards()">
+    <label for="toggle-undefined">Hide Cards</label>
+  </div>
 </div>
 
 <div id="loading" class="loading-container">
@@ -102,13 +104,18 @@ function hideLoading() {
 
 function fetchData() {
     const family = document.getElementById("family-select").value;
-    toggleUndefinedCards();
+    const hideUndefined = document.getElementById("toggle-undefined").checked; // ดึงสถานะของ checkbox
+    console.log(`Fetching data for family: ${family}, hideUndefined: ${hideUndefined}`);
     showLoading();
     fetch(`/realtime_data?family=${family}`)
         .then(response => response.json())
         .then(data => {
             document.getElementById("data-container").innerHTML = renderCards(data.stations);
-            // toggleUndefinedCards(); // ซ่อนการ์ดที่มีค่า undefined ถ้า checkbox ถูกเลือก
+            console.log(`Data fetched for family: ${family}`);
+            if (hideUndefined) {
+                console.log('Hiding undefined cards');
+                toggleUndefinedCards(); // ซ่อนการ์ดที่มีค่า undefined ถ้า checkbox ถูกเลือก
+            }
         })
         .finally(() => {
             hideLoading();
@@ -121,6 +128,7 @@ function setupAutoRefresh(interval) {
 
 function toggleUndefinedCards() {
     const hideUndefined = document.getElementById('toggle-undefined').checked;
+    console.log(`Toggle Undefined Cards: ${hideUndefined}`);
     const cards = document.querySelectorAll('.card');
     cards.forEach(card => {
         const resultElements = card.querySelectorAll('.content p:nth-child(2)');
@@ -132,14 +140,15 @@ function toggleUndefinedCards() {
         });
         if (hideCard) {
             card.style.display = hideUndefined ? 'none' : '';
+            console.log(`Card with undefined values is ${hideUndefined ? 'hidden' : 'shown'}`);
         }
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetchData();
-    setupAutoRefresh(3 * 60 * 1000); // 3 นาที
-});
+// document.addEventListener('DOMContentLoaded', () => {
+//     fetchData();
+//     setupAutoRefresh(3 * 60 * 1000); // 3 นาที
+// });
 </script>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
