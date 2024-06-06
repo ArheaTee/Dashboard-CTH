@@ -102,28 +102,25 @@ function hideLoading() {
     document.getElementById('loading').style.display = 'none';
 }
 
-function fetchData() {
+async function fetchData() {
     const family = document.getElementById("family-select").value;
     const hideUndefined = document.getElementById("toggle-undefined").checked; // ดึงสถานะของ checkbox
     console.log(`Fetching data for family: ${family}, hideUndefined: ${hideUndefined}`);
     showLoading();
-    fetch(`/realtime_data?family=${family}`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("data-container").innerHTML = renderCards(data.stations);
-            console.log(`Data fetched for family: ${family}`);
-            if (hideUndefined) {
-                console.log('Hiding undefined cards');
-                toggleUndefinedCards(); // ซ่อนการ์ดที่มีค่า undefined ถ้า checkbox ถูกเลือก
-            }
-        })
-        .finally(() => {
-            hideLoading();
-        });
-}
-
-function setupAutoRefresh(interval) {
-    setInterval(fetchData, interval);
+    try {
+        const response = await fetch(`/realtime_data?family=${family}`);
+        const data = await response.json();
+        document.getElementById("data-container").innerHTML = renderCards(data.stations);
+        console.log(`Data fetched for family: ${family}`);
+        if (hideUndefined) {
+            console.log('Hiding undefined cards');
+            toggleUndefinedCards(); // ซ่อนการ์ดที่มีค่า undefined ถ้า checkbox ถูกเลือก
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    } finally {
+        hideLoading();
+    }
 }
 
 function toggleUndefinedCards() {
@@ -145,10 +142,6 @@ function toggleUndefinedCards() {
     });
 }
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     fetchData();
-//     setupAutoRefresh(3 * 60 * 1000); // 3 นาที
-// });
 </script>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
