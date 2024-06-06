@@ -141,9 +141,12 @@ function getColor(result) {
 
 // เริ่มต้นเมื่อ DOM ถูกโหลด
 document.addEventListener('DOMContentLoaded', () => {
-    fetchData().then(() => {
-        setInterval(() => {
-            fetchData();
-        }, 2 * 60 * 1000); // Refresh every 2 minutes
-    });
+    const urlParams = new URLSearchParams(window.location.search);
+    const family = urlParams.get('family');
+    if (family) {
+        document.getElementById('family-select').value = family;
+    }
+    fetchData();
+    setupAutoRefresh(3 * 60 * 1000); // 3 นาที
 });
+

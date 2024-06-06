@@ -28,7 +28,7 @@ def home():
 def realtime():
     family = request.args.get('family', 'all')
     summary, all_data = fetch_data_from_urls(family)
-    response = make_response(render_template('realtime.html', data=all_data, summary=summary, urls_data=urls_data))
+    response = make_response(render_template('realtime.html', data=all_data, summary=summary, urls_data=urls_data, selected_family=family))
     response.headers['Cache-Control'] = 'public, max-age=3600'  # 1 hour
     return response
 
@@ -121,4 +121,4 @@ def calculate_summary(data, summary):
     return summary
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8001)
+    app.run(debug=True, port=8001, host='0.0.0.0')
