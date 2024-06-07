@@ -1,58 +1,3 @@
-const items = document.querySelectorAll('.item');
-
-document.querySelectorAll('.toggle-button').forEach(button => {
-    button.addEventListener('click', () => {
-        const card = button.closest('.card');
-        const cardContent = card.querySelector('.card-content');
-        const summaryElement = card.querySelector('.summary');
-        const items = card.querySelectorAll('.item');
-        let passCount = 0;
-        let failCount = 0;
-        let abortCount = 0;
-        let testCount = 0;
-
-        items.forEach(item => {
-            const resultElement = item.querySelector('.content p:nth-child(2)');
-            if (resultElement.textContent.includes('PASSED')) {
-                passCount++;
-            } 
-            else if (resultElement.textContent.includes('FAILED')) {
-                failCount++;
-            }
-            else if (resultElement.textContent.includes('ABORTED')) {
-                abortCount++;
-            }
-            else {
-                testCount++;
-            }
-        });
-
-        summaryElement.textContent = `PASS: ${passCount}, FAIL: ${failCount}, ABORT: ${abortCount}, TEST: ${testCount}`;
-        cardContent.classList.toggle('collapsed');
-        button.textContent = cardContent.classList.contains('collapsed') ? '+' : '-';
-    });
-});
-
-items.forEach(item => {
-    const productname = item.querySelector('.content p:nth-child(1)');
-    const resultElement = item.querySelector('.content p:nth-child(2)');
-
-    if (!productname.textContent.trim() || productname.textContent.trim() === "Station Name:") {
-        item.style.backgroundColor = 'white';
-        productname.textContent = "Station Name: offline";
-    } else {
-        if (resultElement.textContent.includes('PASSED')) {
-            item.style.backgroundColor = 'lightgreen';
-        } else if (resultElement.textContent.includes('FAILED')) {
-            item.style.backgroundColor = 'lightcoral';
-        } else if (resultElement.textContent.includes('ABORTED')) {
-            item.style.backgroundColor = 'lightblue';
-        } else {
-            item.style.backgroundColor = 'orange';
-        }
-    }
-});
-
 // ฟังก์ชันสำหรับแสดงการโหลดข้อมูล
 function showLoading() {
     document.getElementById('loading').style.display = 'flex';
@@ -106,7 +51,7 @@ function renderCards(stations) {
                                 </div>
                             </div>` :
                             items.map(item => `
-                                <div class="item" data-item-id="${item.id}" style="background-color: ${getColor(item.result)};">
+                                <div class="item" data-item-id="${item.id}" style="background-color: ${getColor(item.result, item.display)};">
                                     <div class="id">${item.id}</div>
                                     <div class="content">
                                         <p>Station Name: ${item.station_name}</p>
@@ -129,7 +74,10 @@ function truncateUrl(url) {
 }
 
 // ฟังก์ชันสำหรับกำหนดสีของผลลัพธ์
-function getColor(result) {
+function getColor(result, display) {
+    if (display === '0:00:00') {
+        return 'white';
+    }
     switch(result) {
         case 'PASSED': return 'lightgreen';
         case 'FAILED': return 'lightcoral';
@@ -138,6 +86,7 @@ function getColor(result) {
         default: return 'white';
     }
 }
+
 
 // เริ่มต้นเมื่อ DOM ถูกโหลด
 document.addEventListener('DOMContentLoaded', () => {

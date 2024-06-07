@@ -33,7 +33,7 @@ urls_data = {
         'System integration Test #1': 'http://172.31.6.51:8090/get_all_process_stations_ui/'
     },
     "palomar": {
-        "PAL-FCT-CHAB FCT #1": "http://172.31.6.1:/get_all_process_stations_ui/",
+        "PAL-FCT-CHAB FCT #1": "http://172.31.6.1:8090/get_all_process_stations_ui/",
         "PAL-FCT-CHAB FCT #2": "http://172.31.6.2:8090/get_all_process_stations_ui/",
         "PAL-FCT-CHAB FCT #3": "http://172.31.6.3:8090/get_all_process_stations_ui/",
         "PAL-FCT-CHAB FCT #4": "http://172.31.6.4:8090/get_all_process_stations_ui/",
